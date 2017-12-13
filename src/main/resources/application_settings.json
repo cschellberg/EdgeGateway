@@ -1,0 +1,10 @@
+{
+"thingworxUrl":"ws://192.168.99.100:8888/Thingworx/WS",
+"thingworxAppKey":"38f8afad-a3ba-4d3f-8ab5-00b60e26d747",
+"gatewayIP":"localhost",
+"gatewayPort":8082,
+"things":[
+{"thingName":"TestRemoteThing","edgeDeviceIP":"localhost","edgeDevicePort":8083},
+{"thingName":"TestRemoteThing2","edgeDeviceIP":"localhost","edgeDevicePort":8084}
+]
+}
