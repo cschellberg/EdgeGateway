@@ -16,7 +16,7 @@ import com.thingworx.types.primitives.StringPrimitive;
 
 public class ThingworxChannel {
 
-    private ConcurrentHashMap<String, EdgeDevice> things = new ConcurrentHashMap<String, EdgeDevice>();
+    private ConcurrentHashMap<String, BaseEdgeDevice> things = new ConcurrentHashMap<String, BaseEdgeDevice>();
 
     private ConnectedThingClient connectedThingClient;
 
@@ -36,7 +36,7 @@ public class ThingworxChannel {
         return things.size();
     }
     
-    public void put(String thingName, EdgeDevice edgeDevice){
+    public void put(String thingName, BaseEdgeDevice edgeDevice){
         things.put(thingName, edgeDevice);
     }
 
@@ -47,7 +47,7 @@ public class ThingworxChannel {
     public void send(Message message) throws TimeoutException, ConnectionException, Exception {
         String thingName = message.getDestination();
         try {
-            EdgeDevice edgeDevice = things.get(thingName);
+            BaseEdgeDevice edgeDevice = things.get(thingName);
             String property = message.getPayload().getString(Constants.PROPERTY);
             String value = message.getPayload().getString(Constants.VALUE);
             edgeDevice.setPropertyValue(property, new StringPrimitive(value));

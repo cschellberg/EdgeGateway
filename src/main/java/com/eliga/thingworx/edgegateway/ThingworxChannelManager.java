@@ -12,8 +12,10 @@ import com.thingworx.communications.client.ConnectionException;
 import com.thingworx.communications.client.things.VirtualThing;
 import com.thingworx.metadata.FieldDefinition;
 import com.thingworx.metadata.PropertyDefinition;
+import com.thingworx.metadata.ServiceDefinition;
 import com.thingworx.relationships.RelationshipTypes.ThingworxEntityTypes;
 import com.thingworx.types.InfoTable;
+import com.thingworx.types.collections.ValueCollection;
 
 public class ThingworxChannelManager {
 
@@ -25,8 +27,8 @@ public class ThingworxChannelManager {
         this.numberOfConnections = numberOfConnections;
     }
 
-    public void initChannels(List<EdgeDevice> edgeDevices)  {
-        for (EdgeDevice edgeDevice : edgeDevices) {
+    public void initChannels(List<BaseEdgeDevice> edgeDevices)  {
+        for (BaseEdgeDevice edgeDevice : edgeDevices) {
             try {
                 initChannel(edgeDevice);
             } catch (Exception e) {
@@ -35,7 +37,7 @@ public class ThingworxChannelManager {
         }
     }
 
-    private void initChannel(EdgeDevice edgeDevice) throws Exception {
+    private void initChannel(BaseEdgeDevice edgeDevice) throws Exception {
         ThingworxChannel thingworxChannel = channelMap.computeIfAbsent(edgeDevice.getThingName(), thingName -> {
             if (channelMap.size() < this.numberOfConnections) {
                 ThingworxChannel tempChannel;
@@ -64,7 +66,15 @@ public class ThingworxChannelManager {
             for (FieldDefinition field : infoTable.getDataShape().getFields().values()) {
                 edgeDevice.defineProperty(new PropertyDefinition(field.getName(), field.getDescription(), field.getBaseType()));
             }
-            edgeDevice.initialize();
+            String service="GetServiceDefinitions";
+            ValueCollection parameters = new ValueCollection();
+			infoTable = connectedThingClient.invokeService(ThingworxEntityTypes.Things, edgeDevice.getThingName(), service, parameters, 10000);
+			for ( ValueCollection valueCollection:infoTable.getRows()){
+				String name=valueCollection.getStringValue("name");
+				if ( name.equals("bogusServiceTest")){
+				System.out.println(valueCollection);
+				}
+			}
             connectedThingClient.bindThing(edgeDevice);
             thingworxChannel.put(edgeDevice.getThingName(),edgeDevice);
         } catch (Exception e) {

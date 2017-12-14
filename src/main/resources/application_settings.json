@@ -4,7 +4,7 @@
 "gatewayIP":"localhost",
 "gatewayPort":8082,
 "things":[
-{"thingName":"TestRemoteThing","edgeDeviceIP":"localhost","edgeDevicePort":8083},
-{"thingName":"TestRemoteThing2","edgeDeviceIP":"localhost","edgeDevicePort":8084}
+{"thingName":"TestRemoteThing","edgeDeviceIP":"localhost","edgeDevicePort":8083,"handler":"com.eliga.thingworx.edgegateway.ExampleEdgeDevice"},
+{"thingName":"TestRemoteThing2","edgeDeviceIP":"localhost","edgeDevicePort":8084,"handler":"com.eliga.thingworx.edgegateway.BaseEdgeDevice"}
 ]
 }

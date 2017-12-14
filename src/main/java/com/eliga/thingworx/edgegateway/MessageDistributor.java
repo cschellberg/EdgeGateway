@@ -15,7 +15,7 @@ public class MessageDistributor {
     
     private final ThingworxChannelManager thingworxChannelManager = new ThingworxChannelManager(1);
     
-    private final Map<String,EdgeDevice>  edgeDeviceMap= new HashMap<String,EdgeDevice>();
+    private final Map<String,BaseEdgeDevice>  edgeDeviceMap= new HashMap<String,BaseEdgeDevice>();
     
     private boolean processThingworxMessages=true;
     
@@ -71,12 +71,12 @@ public class MessageDistributor {
     public void init() {
         EdgeGatewaySettings edgeGatewaySettings = EdgeGatewaySettings.getInstance();
         thingworxChannelManager.initChannels(edgeGatewaySettings.getEdgeDevices());
-        for (EdgeDevice edgeDevice:edgeGatewaySettings.getEdgeDevices()){
+        for (BaseEdgeDevice edgeDevice:edgeGatewaySettings.getEdgeDevices()){
         	this.edgeDeviceMap.put(edgeDevice.getThingName(), edgeDevice);
         }   
     }
 
-	public Map<String, EdgeDevice> getEdgeDeviceMap() {
+	public Map<String, BaseEdgeDevice> getEdgeDeviceMap() {
 		return edgeDeviceMap;
 	}
 

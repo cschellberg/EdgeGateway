@@ -1,0 +1,9 @@
+*.class
+*.zip
+bin/
+build/
+.classpath
+.gradle
+.project
+.pydevproject
+.settings

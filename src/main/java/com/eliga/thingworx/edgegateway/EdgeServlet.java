@@ -57,7 +57,7 @@ public class EdgeServlet extends HttpServlet{
             messageDistributor.distribute(message);
             }else if ( Constants.PULL_MESSAGES.equals(action)){
             	String thingName=jsonPayload.getString(Constants.THING_NAME);
-            	EdgeDevice edgeDevice = messageDistributor.getEdgeDeviceMap().get(thingName);
+            	BaseEdgeDevice edgeDevice = messageDistributor.getEdgeDeviceMap().get(thingName);
             	JSONArray jsonArray=new JSONArray();
             	List<Message> messages =new ArrayList<Message>();
             	edgeDevice.getEdgeMessageQueue().drainTo(messages);
