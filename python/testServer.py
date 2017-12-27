@@ -10,9 +10,16 @@ class MessagePuller(object):
         data='{"thingName":"TestRemoteThing","action":"pullMessages"}'
         response = requests.post("http://localhost:8080/EdgeGateway/", data=data, headers = service_headers)
         if response.status_code == 200:
-            print("Get Messages "+str(response.content))
-        else:
-            print("Can't get messages because "+response.status_code)
+            jsonRequest = response.json()
+            print("Processing Messages ")
+            for jsonMessage in jsonRequest:
+                action = jsonMessage.get("action")
+                if action == "edgePush":
+                    print(action+" "+jsonMessage.get('thingName')+":"+jsonMessage.get('property')+"="+jsonMessage.get('value'))
+                elif action == "invokeEdge":
+                    print("invoking"+str(jsonMessage))
+                else:
+                    print("Can't get messages because "+response.status_code)
 
 
 
@@ -59,9 +66,10 @@ class PropertyPusher(threading.Thread):
             except:
 #                print(datetime.now()+" No connection")
                 print("No connection")
-            time.sleep(2)
+            time.sleep(sleepTime)
         done
 
+sleepTime=10
 service_headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
 runPush=True        
 propertyPusher = PropertyPusher(7)

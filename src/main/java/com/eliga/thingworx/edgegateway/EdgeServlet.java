@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@SuppressWarnings("serial")
 public class EdgeServlet extends HttpServlet{
     
     private MessageDistributor messageDistributor = null;
@@ -53,7 +54,7 @@ public class EdgeServlet extends HttpServlet{
             jsonPayload=new JSONObject(payload);
             String action = jsonPayload.getString(Constants.ACTION);
             if ( Constants.PUSH.equals(action)){
-            Message message=new Message(MessageType.THINGWORX,jsonPayload);
+            Message message=new Message(jsonPayload);
             messageDistributor.distribute(message);
             }else if ( Constants.PULL_MESSAGES.equals(action)){
             	String thingName=jsonPayload.getString(Constants.THING_NAME);

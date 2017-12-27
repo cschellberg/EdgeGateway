@@ -60,8 +60,8 @@ public class EdgeGatewaySettings {
 				Object[] args={gatewayIP, gatewayPort, jsonThingObject.getString(Constants.THING_NAME),
 						jsonThingObject.getString(Constants.EDGE_DEVICE_IP),
 						jsonThingObject.getInt(Constants.EDGE_DEVICE_PORT)};
-				BaseEdgeDevice baseEdgeDevice = constructor.newInstance(args);
-				edgeDevices.add(baseEdgeDevice);
+				BaseEdgeDevice edgeDevice = constructor.newInstance(args);
+				edgeDevices.add(edgeDevice);
 			}
 		} catch (Exception ex) {
 			edgeGatewaySettings = null;

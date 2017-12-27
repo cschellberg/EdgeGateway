@@ -10,7 +10,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
@@ -18,12 +17,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.thingworx.common.processors.ReflectionProcessor;
 import com.thingworx.communications.client.things.VirtualThing;
 import com.thingworx.communications.client.things.VirtualThingPropertyChangeEvent;
 import com.thingworx.communications.client.things.VirtualThingPropertyChangeListener;
-import com.thingworx.metadata.ServiceDefinition;
 
+@SuppressWarnings("serial")
 public class BaseEdgeDevice extends VirtualThing implements VirtualThingPropertyChangeListener {
 
 	private final String gatewayIP;
@@ -40,7 +38,7 @@ public class BaseEdgeDevice extends VirtualThing implements VirtualThingProperty
 
 	private final HttpClientContext edgeContext;
 
-	private final LinkedBlockingDeque<Message> edgeMessageQueue = new LinkedBlockingDeque<Message>();
+	protected final LinkedBlockingDeque<Message> edgeMessageQueue = new LinkedBlockingDeque<Message>();
 
 	private final URI edgeUri;
 
@@ -93,10 +91,11 @@ public class BaseEdgeDevice extends VirtualThing implements VirtualThingProperty
 	public void propertyChangeEventReceived(VirtualThingPropertyChangeEvent propertyChangeEvent) {
 		JSONObject payload = new JSONObject();
 		try {
+			payload.put(Constants.ACTION, Constants.EDGE_PUSH);
 			payload.put(Constants.THING_NAME, this.getName());
 			payload.put(Constants.PROPERTY, propertyChangeEvent.getProperty().getPropertyDefinition().getName());
 			payload.put(Constants.VALUE, propertyChangeEvent.getPrimitiveValue().getStringValue());
-			Message message = new Message(MessageType.EDGE, payload);
+			Message message = new Message(payload);
 			this.edgeMessageQueue.add(message);
 			notifyDevice();
 		} catch (Exception e) {
@@ -104,7 +103,7 @@ public class BaseEdgeDevice extends VirtualThing implements VirtualThingProperty
 		}
 	}
 
-	private void notifyDevice() throws URISyntaxException, ClientProtocolException, IOException, JSONException {
+	protected void notifyDevice() throws URISyntaxException, ClientProtocolException, IOException, JSONException {
 		HttpPost request = new HttpPost(edgeUri);
 		try {
 			JSONObject jsonObject = new JSONObject();

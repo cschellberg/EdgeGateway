@@ -3,9 +3,6 @@ package com.eliga.thingworx.edgegateway;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
-
-import org.json.JSONObject;
 
 
 public class MessageDistributor {
@@ -28,9 +25,7 @@ public class MessageDistributor {
     }
     
     public void distribute(Message message) throws InterruptedException{
-        if ( message.getMessageType() == MessageType.THINGWORX){
         thingworxMessageQueue.put(message);
-        } 
     }
     
     

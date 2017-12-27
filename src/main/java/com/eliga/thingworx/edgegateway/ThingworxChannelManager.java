@@ -9,10 +9,8 @@ import java.util.concurrent.TimeoutException;
 
 import com.thingworx.communications.client.ConnectedThingClient;
 import com.thingworx.communications.client.ConnectionException;
-import com.thingworx.communications.client.things.VirtualThing;
 import com.thingworx.metadata.FieldDefinition;
 import com.thingworx.metadata.PropertyDefinition;
-import com.thingworx.metadata.ServiceDefinition;
 import com.thingworx.relationships.RelationshipTypes.ThingworxEntityTypes;
 import com.thingworx.types.InfoTable;
 import com.thingworx.types.collections.ValueCollection;
@@ -66,15 +64,7 @@ public class ThingworxChannelManager {
             for (FieldDefinition field : infoTable.getDataShape().getFields().values()) {
                 edgeDevice.defineProperty(new PropertyDefinition(field.getName(), field.getDescription(), field.getBaseType()));
             }
-            String service="GetServiceDefinitions";
-            ValueCollection parameters = new ValueCollection();
-			infoTable = connectedThingClient.invokeService(ThingworxEntityTypes.Things, edgeDevice.getThingName(), service, parameters, 10000);
-			for ( ValueCollection valueCollection:infoTable.getRows()){
-				String name=valueCollection.getStringValue("name");
-				if ( name.equals("bogusServiceTest")){
-				System.out.println(valueCollection);
-				}
-			}
+            edgeDevice.initializeFromAnnotations();
             connectedThingClient.bindThing(edgeDevice);
             thingworxChannel.put(edgeDevice.getThingName(),edgeDevice);
         } catch (Exception e) {

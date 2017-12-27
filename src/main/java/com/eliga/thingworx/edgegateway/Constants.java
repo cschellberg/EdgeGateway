@@ -16,6 +16,12 @@ public class Constants {
 	public static final String ACTION = "action";
 	public static final String PUSH = "push";
 	public static final String PULL_MESSAGES = "pullMessages";
-	
+	public static final String EDGE_PUSH = "edgePush";
+	public static final String INVOKE_EDGE = "invokeEdge";
+	public static final String SERVICE = "service";
+	public static final String ARGS = "args";
+	public static final String INVOKE_PLATFORM = "invokePlatform";
+	public static final String ARG_NAME = "argName";
+	public static final String ARG_VALUE = "argValue";
 
 }
