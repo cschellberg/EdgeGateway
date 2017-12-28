@@ -23,5 +23,7 @@ public class Constants {
 	public static final String INVOKE_PLATFORM = "invokePlatform";
 	public static final String ARG_NAME = "argName";
 	public static final String ARG_VALUE = "argValue";
+	public static final String SUCCESS = "sucess";
+	public static final String FAILURE = "failure";
 
 }
