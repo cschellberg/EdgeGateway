@@ -20,10 +20,10 @@ public class Constants {
 	public static final String INVOKE_EDGE = "invokeEdge";
 	public static final String SERVICE = "service";
 	public static final String ARGS = "args";
-	public static final String INVOKE_PLATFORM = "invokePlatform";
 	public static final String ARG_NAME = "argName";
 	public static final String ARG_VALUE = "argValue";
 	public static final String SUCCESS = "sucess";
 	public static final String FAILURE = "failure";
+	public static final String PROPERTIES = "properties";
 
 }

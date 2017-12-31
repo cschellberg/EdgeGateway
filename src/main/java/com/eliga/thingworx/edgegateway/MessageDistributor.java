@@ -70,7 +70,7 @@ public class MessageDistributor {
 								}
 							});
 							//TODO make timeout configurarable
-							String result=future.get(10, TimeUnit.SECONDS);
+							String result=future.get(100, TimeUnit.SECONDS);
 							System.out.println("Result of platform operation "+result);
 						}
 					} catch (Exception ex) {

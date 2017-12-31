@@ -57,19 +57,20 @@ class PropertyPusher(threading.Thread):
             try:
                 value="value---"+str(counter)    
                 counter += 1
-                data='{"thingName":"TestRemoteThing","action":"push","property":"p1","value":"'+value+'"}'
+                data='{"thingName":"TestRemoteThing","action":"push","properties":[{"property":"p1","value":"'+value+'"},{"property":"p3","value":"'+str(counter)+'"}]}'
                 response = requests.post("http://localhost:8080/EdgeGateway/", data=data, headers = service_headers)
                 if response.status_code == 200:
                     print("Update successful")
                 else:
                     print("Update failed because "+response.status_code)
+
             except:
 #                print(datetime.now()+" No connection")
                 print("No connection")
             time.sleep(sleepTime)
         done
 
-sleepTime=10
+sleepTime=30
 service_headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
 runPush=True        
 propertyPusher = PropertyPusher(7)

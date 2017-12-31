@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import com.thingworx.communications.client.things.VirtualThing;
 import com.thingworx.communications.client.things.VirtualThingPropertyChangeEvent;
 import com.thingworx.communications.client.things.VirtualThingPropertyChangeListener;
+import com.thingworx.metadata.annotations.MetadataAnnotationParser;
 
 @SuppressWarnings("serial")
 public class BaseEdgeDevice extends VirtualThing implements VirtualThingPropertyChangeListener {
@@ -115,6 +116,15 @@ public class BaseEdgeDevice extends VirtualThing implements VirtualThingProperty
 			request.releaseConnection();
 		}
 
+	}
+
+	public void initializeServicesFromAnnotations() throws Exception {
+		try {
+			this.setThingShape(MetadataAnnotationParser.createInternalShape(this.getClass(), true));
+			this.createServiceProcessorsFromThingShape(this.getThingShape(), this.getClass(), (String) null);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

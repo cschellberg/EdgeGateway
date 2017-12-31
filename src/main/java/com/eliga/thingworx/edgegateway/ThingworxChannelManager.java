@@ -60,11 +60,11 @@ public class ThingworxChannelManager {
         ConnectedThingClient connectedThingClient = thingworxChannel.getConnectedThingClient();
         edgeDevice.setClient(connectedThingClient);
         try {
+            edgeDevice.initializeServicesFromAnnotations();
             InfoTable infoTable = connectedThingClient.readProperties(ThingworxEntityTypes.Things, edgeDevice.getThingName(), 10000);
             for (FieldDefinition field : infoTable.getDataShape().getFields().values()) {
                 edgeDevice.defineProperty(new PropertyDefinition(field.getName(), field.getDescription(), field.getBaseType()));
             }
-            edgeDevice.initializeFromAnnotations();
             connectedThingClient.bindThing(edgeDevice);
             thingworxChannel.put(edgeDevice.getThingName(),edgeDevice);
         } catch (Exception e) {

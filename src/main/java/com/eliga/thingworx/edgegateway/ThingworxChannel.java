@@ -11,7 +11,10 @@ import org.json.JSONObject;
 import com.thingworx.communications.client.ClientConfigurator;
 import com.thingworx.communications.client.ConnectedThingClient;
 import com.thingworx.communications.client.ConnectionException;
+import com.thingworx.metadata.FieldDefinition;
+import com.thingworx.metadata.ServiceDefinition;
 import com.thingworx.types.BaseTypes;
+import com.thingworx.types.InfoTable;
 import com.thingworx.types.collections.ValueCollection;
 import com.thingworx.types.primitives.IPrimitiveType;
 import com.thingworx.types.primitives.StringPrimitive;
@@ -50,40 +53,27 @@ public class ThingworxChannel {
 	public void send(Message message) throws TimeoutException, ConnectionException, Exception {
 		String action = message.getPayload().getString(Constants.ACTION);
 		if (Constants.PUSH.equals(action)) {
-			setProperty(message);
-		} else if ( Constants.INVOKE_PLATFORM.equals(action)){
-			invokePlatform(message);
-		}else {
-			System.out.println(action+" not found");
+			setProperties(message);
+		} else {
+			System.out.println(action + " not found");
 		}
 	}
 
-	private void invokePlatform(Message message) {
+	private void setProperties(Message message) {
 		String thingName = message.getDestination();
 		try {
 			BaseEdgeDevice edgeDevice = things.get(thingName);
-			String serviceName=message.getPayload().getString(Constants.SERVICE);
-			JSONArray args =message.getPayload().getJSONArray(Constants.ARGS);
-			for (int ii =0;ii<args.length();ii++){
-				
+			JSONArray jsonProperties = message.getPayload().getJSONArray(Constants.PROPERTIES);
+			for (int ii = 0; ii < jsonProperties.length(); ii++) {
+				JSONObject jsonProperty = jsonProperties.getJSONObject(ii);
+				String propertyName = jsonProperty.getString(Constants.PROPERTY);
+				String value = jsonProperty.getString(Constants.VALUE);
+				Property property = edgeDevice.getProperty(propertyName);
+				BaseTypes baseType = property.getPropertyDefinition().getBaseType();
+				IPrimitiveType primitiveType = BaseTypes.ConvertToPrimitive(value, baseType);
+				System.out.println("Setting property "+propertyName+" with "+primitiveType.getValue());
+				edgeDevice.setPropertyValue(propertyName, primitiveType);
 			}
-			ValueCollection parameters=new ValueCollection();
-			edgeDevice.invokeService(serviceName, parameters);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}		
-	}
-
-	private void setProperty(Message message) {
-		String thingName = message.getDestination();
-		try {
-			BaseEdgeDevice edgeDevice = things.get(thingName);
-			String propertyName = message.getPayload().getString(Constants.PROPERTY);
-			String value = message.getPayload().getString(Constants.VALUE);
-			Property property = edgeDevice.getProperty(propertyName);
-			BaseTypes baseType = property.getPropertyDefinition().getBaseType();
-			IPrimitiveType primitiveType = BaseTypes.ConvertToPrimitive(value, baseType);
-			edgeDevice.setPropertyValue(propertyName, primitiveType);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
