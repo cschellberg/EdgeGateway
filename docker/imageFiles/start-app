@@ -1,0 +1,5 @@
+#!/bin/bash -x
+
+/usr/local/tomcat/bin/startup.sh
+
+#sleep infinity
