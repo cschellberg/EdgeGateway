@@ -79,3 +79,7 @@ The edge nano server will pull all property definitions from the platform so you
 The services are implemented on the EdgeNanoServer through annotations.  And example can be seen in the class, ExampleEdgeDevice.  This will encapsulate the service name and parameters into a JSON payload and send it to the python client.
 
 I am also working on a test client in C++
+
+Any questions can be referred to Donald Schellberg
+dschellberg@gmail.com
+I am also available for consulting
